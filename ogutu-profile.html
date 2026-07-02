@@ -1,0 +1,255 @@
+import os
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cindy_atieno_ogutu ~ terminal_portfolio</title>
+    <style>
+        /* Import a clean, retro-modern monospace font */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0d0714; /* Deep dark purple-tinted background */
+            color: #a3e635; /* Bright terminal green */
+            font-family: 'Fira Code', monospace;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .terminal-window {
+            width: 100%;
+            max-width: 900px;
+            background-color: #160e22; /* Rich dark purple window background */
+            border: 2px solid #6b21a8; /* Muted purple border */
+            border-radius: 8px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 15px rgba(107, 33, 168, 0.2);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background-color: #241435; /* Header background accent */
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #6b21a8;
+            position: relative;
+        }
+
+        .window-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .btn-close { background-color: #ef4444; }
+        .btn-minimize { background-color: #eab308; }
+        .btn-maximize { background-color: #22c55e; }
+
+        .window-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #c084fc; /* Soft purple label */
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .terminal-body {
+            padding: 24px;
+            font-size: 1rem;
+        }
+
+        /* Styling CLI syntax components */
+        .prompt-line {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+
+        .user-host {
+            color: #c084fc; /* Purple user context */
+            font-weight: bold;
+        }
+
+        .directory {
+            color: #e879f9; /* Magenta-purple directory context */
+        }
+
+        .command {
+            color: #f8fafc; /* Crisp white command text */
+            font-weight: 500;
+        }
+
+        .output-block {
+            color: #cbd5e1; /* Subtle text off-white/light gray for content delivery */
+            padding-left: 4px;
+            margin-bottom: 24px;
+        }
+
+        .output-highlight {
+            color: #a3e635; /* Pop of green within text blocks */
+            font-weight: bold;
+        }
+
+        .ascii-art {
+            color: #d8b4fe;
+            white-space: pre;
+            font-size: 0.85rem;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        /* List styling for keys/values */
+        .info-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            margin-top: 10px;
+        }
+
+        .info-key {
+            color: #a3e635;
+            font-weight: bold;
+        }
+
+        .info-val {
+            color: #e2e8f0;
+        }
+
+        /* Interactive Blink Cursor effect */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background-color: #a3e635;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            from, to { background-color: transparent }
+            50% { background-color: #a3e635; }
+        }
+
+        a {
+            color: #f472b6; /* Soft pink-purple accent for links */
+            text-decoration: none;
+            border-bottom: 1px dashed #f472b6;
+            transition: all 0.2s ease;
+        }
+
+        a:hover {
+            color: #a3e635;
+            border-bottom: 1px solid #a3e635;
+            background-color: rgba(163, 230, 53, 0.1);
+        }
+
+        /* Custom Scrollbar for a polished aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #160e22;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a1d96;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b21a8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="terminal-window">
+    <div class="terminal-header">
+        <div class="window-buttons">
+            <span class="btn btn-close"></span>
+            <span class="btn btn-minimize"></span>
+            <span class="btn btn-maximize"></span>
+        </div>
+        <div class="window-title">cindy@atieno:~</div>
+    </div>
+    
+    <div class="terminal-body">
+        
+        <div class="ascii-art">
+   ____ _____ _   _ ______     __
+  / ___|_   _| | | |  _ \ \   / /
+ | |     | | | |_| | | | \ \ / / 
+ | |___  | | |  _  | |_| |\ V /  
+  \____| |_| |_| |_|____/  |_|   
+                                 
+        </div>
+
+        <div class="prompt-line">
+            <span class="user-host">guest@sf-terminal:~$</span>
+            <span class="command">cat whoami.md</span>
+        </div>
+        <div class="output-block">
+            <p>Hello, world! I am <span class="output-highlight">Cindy Atieno Ogutu</span>.</p>
+            <p style="margin-top: 8px;">I am a systems and frontend engineer focused on building resilient, scalable architectures and rich digital experiences. I approach software engineering with a passion for dependability metrics, distributed consensus models, and robust, beautifully interactive interfaces. I prioritize professional impact and comprehensive problem-solving over raw syntax alone.</p>
+        </div>
+
+        <div class="prompt-line">
+            <span class="user-host">guest@sf-terminal:~$</span>
+            <span class="command">sys-info --fetch</span>
+        </div>
+        <div class="output-block">
+            <div class="info-grid">
+                <div class="info-key">OS Focus:</div>
+                <div class="info-val">Ubuntu / Linux Environment Architectures</div>
+                
+                <div class="info-key">Core Stack:</div>
+                <div class="info-val">TypeScript, JavaScript, React, Shell Scripting</div>
+                
+                <div class="info-key">Specialties:</div>
+                <div class="info-val">Distributed Systems Design, DevOps Pipelines, Web Audio Engineering</div>
+                
+                <div class="info-key">Frameworks:</div>
+                <div class="info-val">AWS Well-Architected Systems, Supervised/Unsupervised Learning Frameworks</div>
+            </div>
+        </div>
+
+        <div class="prompt-line">
+            <span class="user-host">guest@sf-terminal:~$</span>
+            <span class="command">cat creative_ventures.log</span>
+        </div>
+        <div class="output-block">
+            <p>Beyond systems engineering, I explore narratives and complex themes through creative writing and poetry on Substack under the pen name <span class="output-highlight">Captain Bliss</span>.</p>
+        </div>
+
+        <div class="prompt-line">
+            <span class="user-host">guest@sf-terminal:~$</span>
+            <span class="command">_</span><span class="cursor"></span>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
