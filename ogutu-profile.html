@@ -1,14 +1,11 @@
-import os
-
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cindy_atieno_ogutu ~ terminal_portfolio</title>
+    <title>cindy_atieno_ogutu ~ advanced_terminal</title>
     <style>
-        /* Import a clean, retro-modern monospace font */
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght400;500;700&display=swap');
 
         * {
             box-sizing: border-box;
@@ -17,8 +14,8 @@ html_content = """<!DOCTYPE html>
         }
 
         body {
-            background-color: #0d0714; /* Deep dark purple-tinted background */
-            color: #a3e635; /* Bright terminal green */
+            background-color: #0d0714;
+            color: #a3e635;
             font-family: 'Fira Code', monospace;
             padding: 20px;
             line-height: 1.6;
@@ -31,15 +28,15 @@ html_content = """<!DOCTYPE html>
         .terminal-window {
             width: 100%;
             max-width: 900px;
-            background-color: #160e22; /* Rich dark purple window background */
-            border: 2px solid #6b21a8; /* Muted purple border */
+            background-color: #160e22;
+            border: 2px solid #6b21a8;
             border-radius: 8px;
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 15px rgba(107, 33, 168, 0.2);
             overflow: hidden;
         }
 
         .terminal-header {
-            background-color: #241435; /* Header background accent */
+            background-color: #241435;
             padding: 12px 16px;
             display: flex;
             align-items: center;
@@ -65,7 +62,7 @@ html_content = """<!DOCTYPE html>
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            color: #c084fc; /* Soft purple label */
+            color: #c084fc;
             font-size: 0.9rem;
             font-weight: 500;
             letter-spacing: 0.5px;
@@ -74,40 +71,37 @@ html_content = """<!DOCTYPE html>
         .terminal-body {
             padding: 24px;
             font-size: 1rem;
+            height: 550px;
+            overflow-y: auto;
         }
 
-        /* Styling CLI syntax components */
         .prompt-line {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 18px;
-            margin-bottom: 8px;
+            margin-top: 12px;
+            margin-bottom: 4px;
         }
 
         .user-host {
-            color: #c084fc; /* Purple user context */
+            color: #c084fc;
             font-weight: bold;
         }
 
-        .directory {
-            color: #e879f9; /* Magenta-purple directory context */
-        }
-
         .command {
-            color: #f8fafc; /* Crisp white command text */
+            color: #f8fafc;
             font-weight: 500;
         }
 
         .output-block {
-            color: #cbd5e1; /* Subtle text off-white/light gray for content delivery */
+            color: #cbd5e1;
             padding-left: 4px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .output-highlight {
-            color: #a3e635; /* Pop of green within text blocks */
+            color: #a3e635;
             font-weight: bold;
         }
 
@@ -120,56 +114,64 @@ html_content = """<!DOCTYPE html>
             overflow-x: auto;
         }
 
-        /* List styling for keys/values */
-        .info-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 8px 16px;
-            margin-top: 10px;
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
         }
 
-        .info-key {
-            color: #a3e635;
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #f8fafc;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            flex: 1;
+            outline: none;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .help-cmd {
+            color: #e879f9;
             font-weight: bold;
         }
 
-        .info-val {
-            color: #e2e8f0;
-        }
-
-        /* Interactive Blink Cursor effect */
-        .cursor {
+        /* Easter Egg Animations */
+        .steam-line {
             display: inline-block;
-            width: 8px;
-            height: 18px;
-            background-color: #a3e635;
-            animation: blink 1s step-end infinite;
-            vertical-align: middle;
-            margin-left: 4px;
+            animation: floatUp 2s infinite ease-in-out;
+            color: #c084fc;
+        }
+        .steam-2 { animation-delay: 0.4s; }
+        .steam-3 { animation-delay: 0.8s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10px) scale(1.2); opacity: 0; }
         }
 
-        @keyframes blink {
-            from, to { background-color: transparent }
-            50% { background-color: #a3e635; }
-        }
-
-        a {
-            color: #f472b6; /* Soft pink-purple accent for links */
-            text-decoration: none;
-            border-bottom: 1px dashed #f472b6;
-            transition: all 0.2s ease;
-        }
-
-        a:hover {
+        .matrix-rain {
             color: #a3e635;
-            border-bottom: 1px solid #a3e635;
-            background-color: rgba(163, 230, 53, 0.1);
+            animation: matrixFade 1.5s infinite linear;
+            white-space: pre;
         }
 
-        /* Custom Scrollbar for a polished aesthetic */
+        @keyframes matrixFade {
+            0% { opacity: 0.3; text-shadow: 0 0 0px #a3e635; }
+            50% { opacity: 1; text-shadow: 0 0 8px #a3e635; }
+            100% { opacity: 0.3; text-shadow: 0 0 0px #a3e635; }
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: #160e22;
@@ -178,14 +180,11 @@ html_content = """<!DOCTYPE html>
             background: #4a1d96;
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6b21a8;
-        }
     </style>
 </head>
 <body>
 
-<div class="terminal-window">
+<div class="terminal-window" onclick="document.getElementById('cli-input').focus()">
     <div class="terminal-header">
         <div class="window-buttons">
             <span class="btn btn-close"></span>
@@ -195,61 +194,158 @@ html_content = """<!DOCTYPE html>
         <div class="window-title">cindy@atieno:~</div>
     </div>
     
-    <div class="terminal-body">
-        
+    <div class="terminal-body" id="terminal-history">
         <div class="ascii-art">
    ____ _____ _   _ ______     __
   / ___|_   _| | | |  _ \ \   / /
  | |     | | | |_| | | | \ \ / / 
  | |___  | | |  _  | |_| |\ V /  
   \____| |_| |_| |_|____/  |_|   
-                                 
         </div>
 
-        <div class="prompt-line">
-            <span class="user-host">guest@sf-terminal:~$</span>
-            <span class="command">cat whoami.md</span>
-        </div>
         <div class="output-block">
-            <p>Hello, world! I am <span class="output-highlight">Cindy Atieno Ogutu</span>.</p>
-            <p style="margin-top: 8px;">I am a systems and frontend engineer focused on building resilient, scalable architectures and rich digital experiences. I approach software engineering with a passion for dependability metrics, distributed consensus models, and robust, beautifully interactive interfaces. I prioritize professional impact and comprehensive problem-solving over raw syntax alone.</p>
+            <p>Welcome back, explorer.</p>
+            <p>Type <span class="output-highlight">help</span> to explore my stack, background, and secret modes.</p>
         </div>
 
-        <div class="prompt-line">
+        <div id="logs"></div>
+
+        <div class="input-container">
             <span class="user-host">guest@sf-terminal:~$</span>
-            <span class="command">sys-info --fetch</span>
+            <input type="text" id="cli-input" class="terminal-input" autofocus autocomplete="off" spellcheck="false">
         </div>
-        <div class="output-block">
-            <div class="info-grid">
-                <div class="info-key">OS Focus:</div>
-                <div class="info-val">Ubuntu / Linux Environment Architectures</div>
-                
-                <div class="info-key">Core Stack:</div>
-                <div class="info-val">TypeScript, JavaScript, React, Shell Scripting</div>
-                
-                <div class="info-key">Specialties:</div>
-                <div class="info-val">Distributed Systems Design, DevOps Pipelines, Web Audio Engineering</div>
-                
-                <div class="info-key">Frameworks:</div>
-                <div class="info-val">AWS Well-Architected Systems, Supervised/Unsupervised Learning Frameworks</div>
-            </div>
-        </div>
-
-        <div class="prompt-line">
-            <span class="user-host">guest@sf-terminal:~$</span>
-            <span class="command">cat creative_ventures.log</span>
-        </div>
-        <div class="output-block">
-            <p>Beyond systems engineering, I explore narratives and complex themes through creative writing and poetry on Substack under the pen name <span class="output-highlight">Captain Bliss</span>.</p>
-        </div>
-
-        <div class="prompt-line">
-            <span class="user-host">guest@sf-terminal:~$</span>
-            <span class="command">_</span><span class="cursor"></span>
-        </div>
-
     </div>
 </div>
+
+<script>
+    // Pools of answers to keep cycles fresh and informative
+    const responses = {
+        whoami: [
+            "I am <span class='output-highlight'>Cindy Atieno Ogutu</span>. I build resilient backend systems and dynamic client-side applications. I care about systems that don't crack under load.",
+            "That's me! Cindy. Currently deep in system modeling, distributed architectures, and designing frontends that speak to real-world context.",
+            "Cindy here. I spend my days orchestrating environments where clean code, system dependability metrics, and human creativity meet."
+        ],
+        stack: [
+            "My workflow is grounded in <span class='output-highlight'>Linux (Ubuntu)</span>, automated with shell scripting, and built using TypeScript, JavaScript, and React.",
+            "Frontend and DevOps engineering drive my practical stack. I use React on the interface layer and depend heavily on structural shell scripting underneath.",
+            "I build architectures targeting the AWS Well-Architected Framework guidelines, choosing tools that maximize reliability over code complexity."
+        ],
+        systems: [
+            "I have a deep focus on distributed systems theory. I study leader election, failure detection topologies, and consensus engines like Paxos.",
+            "Currently analyzing system availability patterns, discrete-event queue simulations, and network performance thresholds under stress.",
+            "I enjoy tracing failure boundaries—how data moves safely across networks when nodes go down or lag unexpectedly."
+        ],
+        creative: [
+            "When the terminal closes, I write poetry and narratives under the alias <span class='output-highlight'>Captain Bliss</span> over on Substack.",
+            "My writing space as Captain Bliss explores complex human mechanics and abstract philosophies through poetry.",
+            "Storytelling balances out my technical architecture. Creative writing offers an abstract blueprint distinct from system design."
+        ],
+        fact: [
+            "Fun Fact: I once built a web-based audio platform using the native Web Audio API just to map out dynamic sound routing parameters!",
+            "Fun Fact: I prefer a full Linux ecosystem. Bash scripting isn't just an option for automating tasks; it's practically my morning coffee.",
+            "Fun Fact: I once wrote a complex literature review for a digital mentorship tracking engine aimed at helping low-resource urban communities."
+        ]
+    };
+
+    // Tracks index offsets for alternating responses
+    const counters = { whoami: 0, stack: 0, systems: 0, creative: 0, fact: 0 };
+
+    const inputField = document.getElementById('cli-input');
+    const logsContainer = document.getElementById('logs');
+    const historyWindow = document.getElementById('terminal-history');
+
+    inputField.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const rawInput = inputField.value;
+            const cmd = rawInput.trim().toLowerCase();
+            
+            if (cmd.length === 0) return;
+
+            createLogEntry(rawInput, true);
+
+            if (responses[cmd] !== undefined) {
+                // Fetch alternating response from the specific category array
+                const index = counters[cmd] % responses[cmd].length;
+                createLogEntry(responses[cmd][index]);
+                counters[cmd]++;
+            } else {
+                switch(cmd) {
+                    case 'help':
+                        showHelp();
+                        break;
+                    case 'clear':
+                        logsContainer.innerHTML = '';
+                        break;
+                    case 'coffee':
+                        triggerCoffee();
+                        break;
+                    case 'blisstime':
+                        triggerBlisstime();
+                        break;
+                    default:
+                        createLogEntry(`Unknown command: '${rawInput}'. Try typing <span class="output-highlight">help</span> or <span class="output-highlight">fact</span>.`);
+                }
+            }
+
+            inputField.value = '';
+            historyWindow.scrollTop = historyWindow.scrollHeight;
+        }
+    });
+
+    function createLogEntry(text, isCommand = false) {
+        const div = document.createElement('div');
+        if (isCommand) {
+            div.className = 'prompt-line';
+            div.innerHTML = `<span class="user-host">guest@sf-terminal:~$</span><span class="command">${text}</span>`;
+        } else {
+            div.className = 'output-block';
+            div.innerHTML = text.startsWith('<') ? text : `<p>${text}</p>`;
+        }
+        logsContainer.appendChild(div);
+    }
+
+    function showHelp() {
+        const helpText = `
+            <p>Run these commands for dynamic facts and details:</p>
+            <div class="help-grid">
+                <span class="help-cmd">whoami</span><span class="info-val">Bio profiles (changes each run)</span>
+                <span class="help-cmd">stack</span><span class="info-val">Tech infrastructure and tooling specs</span>
+                <span class="help-cmd">systems</span><span class="info-val">Distributed environments deep dive</span>
+                <span class="help-cmd">creative</span><span class="info-val">Explore my Captain Bliss writing identity</span>
+                <span class="help-cmd">fact</span><span class="info-val">Uncover a random piece of trivia about me</span>
+                <span class="help-cmd">coffee</span><span class="info-val">Initiate fuel synthesis mode</span>
+                <span class="help-cmd">blisstime</span><span class="info-val">Launch the creative narrative screen stream</span>
+                <span class="help-cmd">clear</span><span class="info-val">Wipe screen terminal history buffer</span>
+            </div>
+        `;
+        createLogEntry(helpText);
+    }
+
+    function triggerCoffee() {
+        const coffeeArt = `
+          <span class="steam-line">~</span>  <span class="steam-line steam-2">~</span>  <span class="steam-line steam-3">~</span>
+         |___________| )
+          \\         / /
+           \\_______/ /
+            _______
+           |_______|
+           <p style="margin-top:10px; color:#c084fc;">[SUCCESS] Coffee framework active. Caffeine injected into terminal loop.</p>
+        `;
+        createLogEntry(coffeeArt);
+    }
+
+    function triggerBlisstime() {
+        const matrixArt = `
+        <div class="matrix-rain">
+        B L I S S T I M E
+        ⚓ ✦ ⚙ ⚡ 🌊 ✦ ⚓
+        Poetry stream synchronized...
+        Words compiling into the system buffer.
+        </div>
+        `;
+        createLogEntry(matrixArt);
+    }
+</script>
 
 </body>
 </html>
