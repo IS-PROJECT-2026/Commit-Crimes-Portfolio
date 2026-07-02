@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me: Dennis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0D1117;
+      --panel:     #161B22;
+      --panel2:    #1C2230;
+      --editor:    #0F141B;
+      --border:    #2A3140;
+      --line:      #21262D;
+      --text:      #C9D1D9;
+      --text-dim:  #8B949E;
+      --text-mute: #6E7681;
+      --accent:    #58A6FF;   /* keyword blue   */
+      --green:     #7EE787;   /* string green   */
+      --purple:    #D2A8FF;   /* function purple*/
+      --orange:    #FFA657;   /* constant orange*/
+      --pink:      #FF7B72;   /* tag red/pink   */
+      --yellow:    #E3B341;
+      --gutter:    #484F58;
+    }
+
+    html { height: 100%; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, #17203A 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, #1A2436 0%, transparent 40%),
+        var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 20px 60px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── WINDOW WRAPPER ───────────────────────────────────────────────────────── */
+    .window {
+      width: 100%;
+      max-width: 1000px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.65), 0 4px 16px rgba(0,0,0,0.5);
+      background: var(--editor);
+    }
+
+    /* ── TITLE BAR ────────────────────────────────────────────────────────────── */
+    .titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #FF5F56; }
+    .dot.y { background: #FFBD2E; }
+    .dot.g { background: #27C93F; }
+
+    .titlebar-name {
+      margin-left: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-mute);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── BODY GRID ────────────────────────────────────────────────────────────── */
+    .shell {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      align-items: stretch;
+    }
+
+    /* ── LEFT: SIDEBAR / FILE EXPLORER ────────────────────────────────────────── */
+    .sidebar {
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 18px 0 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-heading {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      padding: 0 18px 12px;
+    }
+
+    .avatar-wrap {
+      padding: 6px 18px 18px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .avatar-fallback {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .id-block { padding: 4px 18px 18px; }
+
+    .id-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .id-name .accent { color: var(--accent); }
+
+    .id-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--green);
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .id-role::before { content: '// '; color: var(--text-mute); }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--purple);
+      border: 1px solid rgba(210,168,255,0.35);
+      border-radius: 20px;
+      padding: 3px 9px;
+    }
+
+    /* file tree */
+    .tree {
+      margin-top: 22px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    .tree-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .tree-row.active {
+      background: var(--panel2);
+      color: var(--text);
+      border-left: 2px solid var(--accent);
+      padding-left: 16px;
+    }
+
+    .tree-row .ic { color: var(--text-mute); }
+    .tree-row.active .ic { color: var(--accent); }
+
+    .side-links {
+      margin-top: auto;
+      padding: 18px 18px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .side-links a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 5px 0;
+    }
+
+    .side-links a:hover { color: var(--green); text-decoration: underline; }
+
+    /* ── RIGHT: EDITOR ────────────────────────────────────────────────────────── */
+    .editor { background: var(--editor); display: flex; flex-direction: column; }
+
+    .tabbar {
+      display: flex;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      padding: 10px 16px;
+      border-right: 1px solid var(--border);
+    }
+
+    .tab.active {
+      background: var(--editor);
+      color: var(--text);
+      border-top: 2px solid var(--accent);
+    }
+
+    .tab .dotmod { color: var(--green); margin-left: 6px; }
+
+    .code {
+      padding: 22px 26px 26px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* section styled as a code block */
+    .section { margin-bottom: 22px; }
+
+    .section-comment {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-mute);
+      margin-bottom: 6px;
+    }
+    .section-comment::before { content: '/* '; }
+    .section-comment::after  { content: ' */'; }
+
+    .section-heading {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .section-heading .fn  { color: var(--purple); }
+    .section-heading .kw  { color: var(--pink); }
+
+    .section-prompt {
+      font-size: 12.5px;
+      font-style: italic;
+      color: var(--text-mute);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .section-body {
+      font-size: 13.5px;
+      color: var(--text-dim);
+      line-height: 1.8;
+      border-left: 2px solid var(--line);
+      padding-left: 14px;
+    }
+    .section-body .str { color: var(--green); }
+
+    /* stack — key/value config rows */
+    .config {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .config-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 10px;
+      font-size: 11.5px;
+      line-height: 2.1;
+      border-bottom: 1px dashed var(--line);
+    }
+    .config-row:last-child { border-bottom: none; }
+
+    .config-key { color: var(--accent); }
+    .config-key::after { content: ':'; color: var(--text-mute); }
+    .config-val { color: var(--green); }
+
+    /* skills — array items */
+    .skills { display: flex; flex-direction: column; gap: 2px; }
+
+    .skill {
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      align-items: baseline;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .skill:last-child { border-bottom: none; }
+
+    .skill-idx {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--orange);
+    }
+    .skill-idx::after { content: ':'; color: var(--text-mute); }
+
+    .skill-text { color: var(--text-dim); line-height: 1.55; }
+
+    .skill-level {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--yellow);
+    }
+
+    /* ── STATUS BAR ───────────────────────────────────────────────────────────── */
+    .statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: var(--accent);
+      color: #0B1220;
+      padding: 6px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+    }
+
+    .statusbar a { color: #0B1220; text-decoration: none; }
+    .statusbar a:hover { text-decoration: underline; }
+    .statusbar .grp { display: flex; align-items: center; gap: 16px; }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────────────────────── */
+    @media (max-width: 760px) {
+      body { padding: 0 0 40px; }
+      .window { border-radius: 0; border-left: none; border-right: none; max-width: 560px; }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+      .side-links { margin-top: 18px; }
+      .config-row { grid-template-columns: 100px 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+
+<div class="window">
+
+  <!-- ══ TITLE BAR ═══════════════════════════════════════════════════════════ -->
+  <div class="titlebar">
+    <span class="dot r"></span>
+    <span class="dot y"></span>
+    <span class="dot g"></span>
+    <span class="titlebar-name">dennis — about-me — ~/portfolio</span>
+  </div>
+
+  <div class="shell">
+
+    <!-- ══ LEFT: SIDEBAR ═════════════════════════════════════════════════════ -->
+    <aside class="sidebar">
+      <p class="side-heading">Explorer</p>
+
+      <div class="avatar-wrap">
+        <div class="avatar" role="img" aria-label="Photo of Dennis">
+          <!-- Replace the fallback with: <img src="your-photo.jpg" alt="Dennis"> -->
+          <span class="avatar-fallback">D</span>
+        </div>
+      </div>
+
+      <div class="id-block">
+        <div class="id-name">Dennis<span class="accent">.dev</span></div>
+        <div class="id-role">software engineer &amp; problem solver</div>
+        <div class="tags">
+          <span class="tag">Backend</span>
+          <span class="tag">Full-Stack</span>
+          <span class="tag">AI / ML</span>
+        </div>
+      </div>
+
+      <nav class="tree" aria-label="File tree">
+        <div class="tree-row active"><span class="ic">▸</span> about-me.md</div>
+        <div class="tree-row"><span class="ic">▸</span> projects/</div>
+        <div class="tree-row"><span class="ic">▸</span> resume.pdf</div>
+        <div class="tree-row"><span class="ic">▸</span> .gitconfig</div>
+      </nav>
+
+      <div class="side-links">
+        <a href="https://github.com/" target="_blank" rel="noopener">↗ GitHub</a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener">↗ LinkedIn</a>
+        <a href="index.html">← Back to company page</a>
+      </div>
+    </aside>
+
+    <!-- ══ RIGHT: EDITOR ═════════════════════════════════════════════════════ -->
+    <div class="editor">
+
+      <div class="tabbar">
+        <div class="tab active">about-me.md <span class="dotmod">●</span></div>
+        <div class="tab">README.md</div>
+      </div>
+
+      <div class="code">
+
+        <!-- MISSION -->
+        <section class="section">
+          <p class="section-comment">line 01 — mission</p>
+          <h2 class="section-heading"><span class="fn">buildFor</span>(realWorld)</h2>
+          <p class="section-prompt">What kind of real-world problems do you want to solve with technology?</p>
+          <p class="section-body">I like the problems that don't have clean textbook answers — the ones where the constraints are messy and the stakes are real. I want to build software that stays reliable under pressure: systems that keep working when the network drops, the data is imperfect, and the user just needs the thing to <span class="str">"do its job."</span> Good engineering, to me, is quiet — you only notice it when it fails, so my goal is to make sure it doesn't.</p>
+        </section>
+
+        <!-- TECH STACK -->
+        <section class="section">
+          <p class="section-comment">line 02 — stack</p>
+          <h2 class="section-heading"><span class="kw">import</span> myTools</h2>
+          <p class="section-prompt">Which tools do you know, and which two do you want to learn next?</p>
+          <div class="config">
+            <div class="config-row"><span class="config-key">languages</span><span class="config-val">Python, JavaScript, Java, C++</span></div>
+            <div class="config-row"><span class="config-key">frontend</span><span class="config-val">React, HTML, CSS, Tailwind</span></div>
+            <div class="config-row"><span class="config-key">backend</span><span class="config-val">Node.js, Express, SQL, MongoDB</span></div>
+            <div class="config-row"><span class="config-key">tooling</span><span class="config-val">Git, Docker, Linux</span></div>
+            <div class="config-row"><span class="config-key">learning_next</span><span class="config-val">Rust &amp; Cloud Infrastructure (AWS)</span></div>
+          </div>
+        </section>
+
+        <!-- PASSIONS -->
+        <section class="section">
+          <p class="section-comment">line 03 — off the clock</p>
+          <h2 class="section-heading"><span class="fn">whenAFK</span>()</h2>
+          <p class="section-prompt">What do you love doing when you are not looking at a screen?</p>
+          <p class="section-body">Away from the keyboard I'm usually chasing something competitive — football, a good chess match, or whatever game has my attention that month. I read a fair bit too, mostly non-fiction and the occasional deep-dive into how things are built. The common thread is curiosity: I like understanding <span class="str">why</span> something works, not just <span class="str">that</span> it works.</p>
+        </section>
+
+        <!-- SKILLS -->
+        <section class="section">
+          <p class="section-comment">line 04 — skills[]</p>
+          <h2 class="section-heading"><span class="kw">const</span> skills = [</h2>
+          <p class="section-prompt">The three most valuable skills from this degree.</p>
+          <div class="skills">
+            <div class="skill">
+              <span class="skill-idx">0</span>
+              <span class="skill-text">Breaking a large, vague problem into small pieces I can actually ship — and knowing which piece to build first.</span>
+              <span class="skill-level">★★★</span>
+            </div>
+            <div class="skill">
+              <span class="skill-idx">1</span>
+              <span class="skill-text">Debugging with patience: reading errors carefully, forming a hypothesis, and testing it instead of guessing.</span>
+              <span class="skill-level">★★★</span>
+            </div>
+            <div class="skill">
+              <span class="skill-idx">2</span>
+              <span class="skill-text">Working in a team on shared code — writing things other people can read, review, and build on without me in the room.</span>
+              <span class="skill-level">★★★</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ENERGY -->
+        <section class="section">
+          <p class="section-comment">line 05 — flow state</p>
+          <h2 class="section-heading"><span class="fn">whatCharges</span>(me)</h2>
+          <p class="section-prompt">Which classes or projects gave you the most energy, and why?</p>
+          <p class="section-body">The projects that grabbed me were always the ones with a real user on the other end. There's a different kind of focus when the thing you're building isn't just for a grade — when someone would actually run it. Those late nights hunting a bug never felt like work; they felt like a puzzle I refused to lose to.</p>
+        </section>
+
+        <!-- LOOKING BACK -->
+        <section class="section">
+          <p class="section-comment">line 06 — git log --first-year</p>
+          <h2 class="section-heading"><span class="fn">adviceTo</span>(firstYearMe)</h2>
+          <p class="section-prompt">If you could advise your first-year self, what would you say?</p>
+          <p class="section-body">Ship things before you feel ready. The half-finished, slightly embarrassing projects teach you more than any perfectly-planned one you never start. Ask questions early instead of stalling in silence, and don't be afraid to build the ambitious version — the safe one is the one you'll forget.</p>
+        </section>
+
+        <!-- CIRCLE OF INFLUENCE -->
+        <section class="section">
+          <p class="section-comment">line 07 — credits</p>
+          <h2 class="section-heading"><span class="kw">thanks</span> &amp;team</h2>
+          <p class="section-prompt">Who are the mentors, peers, and lecturers who poured into you?</p>
+          <p class="section-body">A huge thank-you to the lecturers and mentors who pushed me past what I thought I could do, and to the classmates who debugged alongside me at 2 a.m. and never let me quit on a hard problem. And above all, to my family and friends — their belief in me is the foundation everything else is built on.</p>
+        </section>
+
+      </div>
+
+      <!-- ══ STATUS BAR ══════════════════════════════════════════════════════ -->
+      <div class="statusbar">
+        <div class="grp">
+          <span>⎇ main</span>
+          <span>about-me.md</span>
+          <span>UTF-8</span>
+        </div>
+        <div class="grp">
+          <span>ICS Capstone · 2026</span>
+          <a href="index.html">← Back to company page</a>
+        </div>
+      </div>
+
+    </div><!-- /editor -->
+
+  </div><!-- /shell -->
+
+</div><!-- /window -->
+
+</body>
+</html>
