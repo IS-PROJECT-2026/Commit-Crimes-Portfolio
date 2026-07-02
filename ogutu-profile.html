@@ -1,350 +1,744 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cindy_atieno_ogutu ~ advanced_terminal</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght400;500;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cindy_atieno_ogutu ~ terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#08050d;
+    --bg-panel:#120b1e;
+    --bg-panel-2:#170f26;
+    --border:#3d2465;
+    --border-soft:#2a1a45;
+    --accent:#7ef542;
+    --accent-dim:#4c9e2e;
+    --violet:#b788ff;
+    --violet-soft:#8a6ac2;
+    --text:#e7e2f5;
+    --text-dim:#9c92b8;
+    --amber:#ffb347;
+    --danger:#ff5f70;
+    --radius:10px;
+    --mono:'Fira Code', monospace;
+    --display:'Space Grotesk', sans-serif;
+  }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  *{box-sizing:border-box;margin:0;padding:0;}
 
-        body {
-            background-color: #0d0714;
-            color: #a3e635;
-            font-family: 'Fira Code', monospace;
-            padding: 20px;
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
 
-        .terminal-window {
-            width: 100%;
-            max-width: 900px;
-            background-color: #160e22;
-            border: 2px solid #6b21a8;
-            border-radius: 8px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 15px rgba(107, 33, 168, 0.2);
-            overflow: hidden;
-        }
+  body{
+    background:
+      radial-gradient(circle at 15% 10%, rgba(126,245,66,0.05), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(183,136,255,0.07), transparent 45%),
+      var(--bg-void);
+    color:var(--text);
+    font-family:var(--mono);
+    min-height:100vh;
+    padding:32px 16px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+  }
 
-        .terminal-header {
-            background-color: #241435;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            border-bottom: 2px solid #6b21a8;
-            position: relative;
-        }
+  /* ---------- Header identity block (visible pre-interaction) ---------- */
+  .identity{
+    width:100%;
+    max-width:960px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:16px;
+    padding:0 4px;
+  }
+  .identity h1{
+    font-family:var(--display);
+    font-size:clamp(1.6rem, 4vw, 2.4rem);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    color:var(--text);
+  }
+  .identity h1 span{color:var(--accent);}
+  .identity .role{
+    color:var(--text-dim);
+    font-size:0.92rem;
+    margin-top:4px;
+    letter-spacing:0.02em;
+  }
+  .identity .role em{
+    color:var(--violet);
+    font-style:normal;
+  }
+  .status-pill{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.78rem;
+    color:var(--accent);
+    border:1px solid var(--border-soft);
+    background:var(--bg-panel);
+    padding:6px 12px;
+    border-radius:999px;
+  }
+  .status-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent);
+    animation:pulse 1.8s infinite ease-in-out;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
 
-        .window-buttons {
-            display: flex;
-            gap: 8px;
-        }
+  /* ---------- Terminal window ---------- */
+  .terminal-window{
+    width:100%;
+    max-width:960px;
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(183,136,255,0.03) inset;
+    overflow:hidden;
+  }
 
-        .btn {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        .btn-close { background-color: #ef4444; }
-        .btn-minimize { background-color: #eab308; }
-        .btn-maximize { background-color: #22c55e; }
+  .terminal-header{
+    background:var(--bg-panel-2);
+    padding:10px 16px;
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid var(--border-soft);
+    position:relative;
+  }
+  .window-buttons{display:flex;gap:7px;}
+  .btn{width:11px;height:11px;border-radius:50%;}
+  .btn-close{background:#ff5f57;}
+  .btn-minimize{background:#febc2e;}
+  .btn-maximize{background:#28c840;}
+  .window-title{
+    position:absolute;left:50%;transform:translateX(-50%);
+    color:var(--text-dim);
+    font-size:0.8rem;
+  }
 
-        .window-title {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #c084fc;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
+  .terminal-body{
+    padding:22px 22px 12px;
+    font-size:0.95rem;
+    height:520px;
+    overflow-y:auto;
+    scroll-behavior:smooth;
+  }
+  .terminal-body:focus-visible{outline:2px solid var(--accent); outline-offset:-2px;}
 
-        .terminal-body {
-            padding: 24px;
-            font-size: 1rem;
-            height: 550px;
-            overflow-y: auto;
-        }
+  .ascii-art{
+    color:var(--violet);
+    white-space:pre;
+    font-size:0.72rem;
+    line-height:1.15;
+    margin-bottom:16px;
+    overflow-x:auto;
+    opacity:0.9;
+  }
 
-        .prompt-line {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-            margin-bottom: 4px;
-        }
+  .boot-line{color:var(--text-dim); font-size:0.82rem; margin-bottom:2px;}
+  .boot-line .ok{color:var(--accent);}
 
-        .user-host {
-            color: #c084fc;
-            font-weight: bold;
-        }
+  .intro p{color:var(--text-dim); margin-bottom:4px;}
+  .intro .hl{color:var(--accent); font-weight:600;}
 
-        .command {
-            color: #f8fafc;
-            font-weight: 500;
-        }
+  .prompt-line{
+    display:flex;align-items:baseline;flex-wrap:wrap;
+    gap:8px;margin-top:16px;margin-bottom:4px;
+  }
+  .user-host{color:var(--violet); font-weight:600; white-space:nowrap;}
+  .command{color:#fff; font-weight:500;}
 
-        .output-block {
-            color: #cbd5e1;
-            padding-left: 4px;
-            margin-bottom: 16px;
-        }
+  .output-block{color:var(--text-dim); padding-left:2px; margin-bottom:14px; line-height:1.55;}
+  .output-block p{margin-bottom:6px;}
+  .output-highlight{color:var(--accent); font-weight:600;}
+  .output-block a{color:var(--amber); text-decoration:none; border-bottom:1px dotted var(--amber);}
+  .output-block a:hover, .output-block a:focus-visible{color:#fff; border-bottom-color:#fff;}
 
-        .output-highlight {
-            color: #a3e635;
-            font-weight: bold;
-        }
+  /* project cards */
+  .proj-card{
+    border:1px solid var(--border-soft);
+    border-left:2px solid var(--accent);
+    background:rgba(126,245,66,0.03);
+    border-radius:6px;
+    padding:10px 14px;
+    margin:10px 0;
+  }
+  .proj-card .proj-title{color:#fff; font-weight:600; margin-bottom:4px;}
+  .proj-card .proj-meta{color:var(--violet-soft); font-size:0.8rem; margin-bottom:6px;}
+  .proj-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  .tag{
+    font-size:0.72rem; color:var(--text-dim);
+    border:1px solid var(--border-soft);
+    padding:2px 8px; border-radius:999px;
+  }
 
-        .ascii-art {
-            color: #d8b4fe;
-            white-space: pre;
-            font-size: 0.85rem;
-            line-height: 1.2;
-            margin-bottom: 24px;
-            overflow-x: auto;
-        }
+  .help-grid{
+    display:grid;
+    grid-template-columns:130px 1fr;
+    gap:6px 10px;
+    margin-top:8px;
+  }
+  .help-cmd{color:#f0abfc; font-weight:600;}
+  .help-cmd::before{content:"$ ";color:var(--text-dim);}
 
-        .input-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 12px;
-        }
+  /* quick command chips */
+  .chip-row{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-top:14px; padding-top:14px;
+    border-top:1px dashed var(--border-soft);
+  }
+  .chip{
+    font-family:var(--mono);
+    font-size:0.78rem;
+    color:var(--accent);
+    background:rgba(126,245,66,0.06);
+    border:1px solid rgba(126,245,66,0.25);
+    padding:5px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .chip:hover, .chip:focus-visible{background:rgba(126,245,66,0.16); transform:translateY(-1px);}
 
-        .terminal-input {
-            background: transparent;
-            border: none;
-            color: #f8fafc;
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-            flex: 1;
-            outline: none;
-        }
+  .input-container{
+    display:flex;align-items:center;gap:8px;
+    margin-top:14px;
+    border-top:1px solid var(--border-soft);
+    padding-top:12px;
+  }
+  .input-label{color:var(--violet); font-weight:600; white-space:nowrap;}
+  .terminal-input{
+    background:transparent;border:none;color:#fff;
+    font-family:var(--mono);font-size:0.95rem;flex:1;outline:none;
+    caret-color:var(--accent);
+  }
+  .terminal-input::placeholder{color:#4a3e63;}
 
-        .help-grid {
-            display: grid;
-            grid-template-columns: 150px 1fr;
-            gap: 4px;
-            margin-top: 8px;
-        }
+  .cursor-blink{
+    display:inline-block;width:8px;height:16px;background:var(--accent);
+    animation:blink 1s steps(1) infinite;vertical-align:middle;
+  }
+  @keyframes blink{50%{opacity:0;}}
 
-        .help-cmd {
-            color: #e879f9;
-            font-weight: bold;
-        }
+  footer{
+    color:var(--text-dim);
+    font-size:0.75rem;
+    text-align:center;
+    max-width:960px;
+  }
+  footer a{color:var(--violet); text-decoration:none;}
 
-        /* Easter Egg Animations */
-        .steam-line {
-            display: inline-block;
-            animation: floatUp 2s infinite ease-in-out;
-            color: #c084fc;
-        }
-        .steam-2 { animation-delay: 0.4s; }
-        .steam-3 { animation-delay: 0.8s; }
+  /* easter eggs */
+  .steam-line{display:inline-block;animation:floatUp 2s infinite ease-in-out;color:var(--violet);}
+  .steam-2{animation-delay:0.4s;}
+  .steam-3{animation-delay:0.8s;}
+  @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:0;}50%{opacity:0.8;}100%{transform:translateY(-10px) scale(1.2);opacity:0;}}
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10px) scale(1.2); opacity: 0; }
-        }
+  .matrix-rain{color:var(--accent);animation:matrixFade 1.5s infinite linear;white-space:pre;}
+  @keyframes matrixFade{0%{opacity:0.3;text-shadow:0 0 0 var(--accent);}50%{opacity:1;text-shadow:0 0 8px var(--accent);}100%{opacity:0.3;text-shadow:0 0 0 var(--accent);}}
 
-        .matrix-rain {
-            color: #a3e635;
-            animation: matrixFade 1.5s infinite linear;
-            white-space: pre;
-        }
+  /* ---------- coffee brew scene ---------- */
+  .coffee-scene{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 0 6px;}
+  .pour-rig{position:relative;height:44px;width:100%;display:flex;justify-content:center;}
+  .pot-spout{width:8px;height:22px;background:linear-gradient(180deg,#5a3a15,#2c1c0a);position:absolute;top:0;left:50%;transform:translateX(-26px) rotate(-8deg);border-radius:2px 2px 1px 1px;box-shadow:0 0 6px rgba(255,179,71,0.15);}
+  .pot-spout::after{content:"";position:absolute;left:50%;top:-6px;width:14px;height:6px;background:#2c1c0a;border-radius:3px;transform:translateX(-50%);}
+  .pour-stream{position:absolute;top:18px;left:50%;transform:translateX(-1px);width:2px;background:linear-gradient(var(--amber),rgba(255,179,71,0));border-radius:1px;animation:pourDrop 0.55s linear infinite;filter:drop-shadow(0 0 3px rgba(255,179,71,0.6));}
+  @keyframes pourDrop{0%{height:0;opacity:1;}75%{height:26px;opacity:1;}100%{height:26px;opacity:0;}}
 
-        @keyframes matrixFade {
-            0% { opacity: 0.3; text-shadow: 0 0 0px #a3e635; }
-            50% { opacity: 1; text-shadow: 0 0 8px #a3e635; }
-            100% { opacity: 0.3; text-shadow: 0 0 0px #a3e635; }
-        }
+  .cup-wrap{position:relative;width:66px;height:52px;margin-top:2px;}
+  .cup{width:100%;height:100%;border:2px solid var(--violet-soft);border-top:none;border-radius:0 0 16px 16px;position:relative;overflow:hidden;background:rgba(255,255,255,0.02);}
+  .cup-handle{position:absolute;right:-15px;top:8px;width:16px;height:20px;border:2px solid var(--violet-soft);border-left:none;border-radius:0 10px 10px 0;}
+  .cup-saucer{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:88px;height:6px;border:2px solid var(--violet-soft);border-radius:50%;background:var(--bg-panel);}
+  .cup-fill{position:absolute;bottom:0;left:0;width:100%;height:0%;background:linear-gradient(180deg,#d69a4a,#6e4319);transition:height 0.5s ease;}
+  .cup-fill::before{content:"";position:absolute;top:-3px;left:0;width:100%;height:7px;background:radial-gradient(ellipse at center,#d69a4a 40%,transparent 72%);animation:liquidWobble 1.4s ease-in-out infinite;}
+  @keyframes liquidWobble{0%,100%{transform:scaleX(1) translateY(0);}50%{transform:scaleX(0.93) translateY(-1px);}}
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #160e22;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4a1d96;
-            border-radius: 4px;
-        }
-    </style>
+  .steam-cluster{position:absolute;top:-26px;left:0;width:100%;display:flex;justify-content:center;gap:12px;pointer-events:none;}
+  .steam-cluster .steam-line{font-size:1rem;}
+
+  .brew-status{font-size:0.8rem;color:var(--amber);margin-top:10px;letter-spacing:0.03em;min-height:1.2em;text-align:center;}
+  .brew-bar-track{width:190px;height:6px;background:var(--bg-panel-2);border:1px solid var(--border-soft);border-radius:4px;overflow:hidden;margin-top:6px;}
+  .brew-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--amber));transition:width 0.35s ease;}
+  .brew-done{color:var(--accent);font-weight:600;margin-top:8px;text-align:center;}
+
+  /* ---------- blisstime scene ---------- */
+  .bliss-scene{position:relative;width:100%;height:130px;border:1px solid var(--border-soft);border-radius:8px;overflow:hidden;background:linear-gradient(180deg,#0a0620 0%,#140b28 55%,#1a1030 100%);margin:10px 0 4px;}
+  .bliss-star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 2.4s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:0.15;}50%{opacity:1;}}
+  .bliss-moon{position:absolute;top:12px;right:18px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff8e0,#ffe9b3);box-shadow:0 0 18px rgba(255,233,179,0.55);}
+  .bliss-ship{position:absolute;bottom:30px;left:-15%;font-size:1.15rem;animation:sail 8s linear infinite;filter:drop-shadow(0 0 4px rgba(183,136,255,0.4));}
+  @keyframes sail{
+    0%{left:-15%;transform:translateY(0) rotate(-2deg);}
+    25%{transform:translateY(-4px) rotate(2deg);}
+    50%{transform:translateY(0) rotate(-2deg);}
+    75%{transform:translateY(-4px) rotate(2deg);}
+    100%{left:110%;transform:translateY(0) rotate(-2deg);}
+  }
+  .bliss-waves{position:absolute;bottom:0;left:0;width:220%;height:24px;background-image:repeating-linear-gradient(90deg, transparent 0 16px, rgba(126,245,66,0.16) 16px 18px, transparent 18px 34px);animation:waveShift 3.2s linear infinite;}
+  .bliss-waves.wave-2{bottom:6px;opacity:0.5;animation-duration:4.6s;animation-direction:reverse;}
+  @keyframes waveShift{from{transform:translateX(0);}to{transform:translateX(-60px);}}
+  .bliss-glyphs{position:absolute;bottom:38px;width:100%;display:flex;justify-content:space-around;pointer-events:none;}
+  .bliss-glyphs span{display:inline-block;color:var(--violet);opacity:0;animation:glyphRise 3.6s ease-in-out infinite;}
+  @keyframes glyphRise{0%{transform:translateY(6px);opacity:0;}15%{opacity:0.9;}85%{opacity:0.4;}100%{transform:translateY(-30px);opacity:0;}}
+
+  .poem-block{margin-top:14px;color:var(--text);font-style:italic;line-height:1.8;border-left:2px solid var(--violet);padding-left:12px;min-height:1.4em;white-space:pre-wrap;}
+  .poem-byline{color:var(--violet-soft);font-style:normal;font-size:0.78rem;margin-top:8px;}
+  .poem-cursor{display:inline-block;width:7px;height:14px;background:var(--accent);animation:blink 1s steps(1) infinite;vertical-align:text-bottom;margin-left:2px;}
+
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-track{background:var(--bg-panel);}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+  @media (max-width:600px){
+    .terminal-body{height:70vh;padding:16px;}
+    .help-grid{grid-template-columns:1fr;}
+    .identity{flex-direction:column; align-items:flex-start;}
+  }
+</style>
 </head>
 <body>
 
-<div class="terminal-window" onclick="document.getElementById('cli-input').focus()">
-    <div class="terminal-header">
-        <div class="window-buttons">
-            <span class="btn btn-close"></span>
-            <span class="btn btn-minimize"></span>
-            <span class="btn btn-maximize"></span>
-        </div>
-        <div class="window-title">cindy@atieno:~</div>
+<div class="identity">
+  <div>
+    <h1>Cindy Atieno Ogutu <span>/</span> <span style="color:var(--violet)">Bliss</span></h1>
+    <div class="role">Backend &amp; frontend engineer — distributed systems, resilient architecture, and <em>Captain Bliss</em> on the side.</div>
+  </div>
+  <div class="status-pill"><span class="status-dot"></span> currently building: Marcktech Group site</div>
+</div>
+
+<div class="terminal-window">
+  <div class="terminal-header">
+    <div class="window-buttons">
+      <span class="btn btn-close"></span>
+      <span class="btn btn-minimize"></span>
+      <span class="btn btn-maximize"></span>
     </div>
-    
-    <div class="terminal-body" id="terminal-history">
-        <div class="ascii-art">
+    <div class="window-title">cindy@atieno:~</div>
+  </div>
+
+  <div class="terminal-body" id="terminal-history" tabindex="0" aria-live="polite" aria-label="Terminal output">
+    <div class="ascii-art">
    ____ _____ _   _ ______     __
   / ___|_   _| | | |  _ \ \   / /
  | |     | | | |_| | | | \ \ / / 
  | |___  | | |  _  | |_| |\ V /  
   \____| |_| |_| |_|____/  |_|   
-        </div>
-
-        <div class="output-block">
-            <p>Welcome back, explorer.</p>
-            <p>Type <span class="output-highlight">help</span> to explore my stack, background, and secret modes.</p>
-        </div>
-
-        <div id="logs"></div>
-
-        <div class="input-container">
-            <span class="user-host">guest@sf-terminal:~$</span>
-            <input type="text" id="cli-input" class="terminal-input" autofocus autocomplete="off" spellcheck="false">
-        </div>
     </div>
+
+    <div id="boot-sequence"></div>
+    <div id="logs"></div>
+
+    <div class="chip-row" id="chip-row" style="display:none;">
+      <button class="chip" data-cmd="whoami">whoami</button>
+      <button class="chip" data-cmd="stack">stack</button>
+      <button class="chip" data-cmd="projects">projects</button>
+      <button class="chip" data-cmd="systems">systems</button>
+      <button class="chip" data-cmd="creative">creative</button>
+      <button class="chip" data-cmd="contact">contact</button>
+      <button class="chip" data-cmd="resume">resume</button>
+    </div>
+
+    <div class="input-container">
+      <label class="input-label" for="cli-input">guest@sf-terminal:~$</label>
+      <input type="text" id="cli-input" class="terminal-input" autocomplete="off" spellcheck="false" placeholder="type 'help' to begin…" aria-label="Terminal command input">
+      <span class="cursor-blink" aria-hidden="true"></span>
+    </div>
+  </div>
 </div>
 
+<footer>
+  Built with HTML/CSS/vanilla JS. Try <strong>help</strong>, <strong>projects</strong>, or press <strong>↑</strong> to reuse a past command.
+</footer>
+
 <script>
-    // Pools of answers to keep cycles fresh and informative
-    const responses = {
-        whoami: [
-            "I am <span class='output-highlight'>Cindy Atieno Ogutu</span>. I build resilient backend systems and dynamic client-side applications. I care about systems that don't crack under load.",
-            "That's me! Cindy. Currently deep in system modeling, distributed architectures, and designing frontends that speak to real-world context.",
-            "Cindy here. I spend my days orchestrating environments where clean code, system dependability metrics, and human creativity meet."
-        ],
-        stack: [
-            "My workflow is grounded in <span class='output-highlight'>Linux (Ubuntu)</span>, automated with shell scripting, and built using TypeScript, JavaScript, and React.",
-            "Frontend and DevOps engineering drive my practical stack. I use React on the interface layer and depend heavily on structural shell scripting underneath.",
-            "I build architectures targeting the AWS Well-Architected Framework guidelines, choosing tools that maximize reliability over code complexity."
-        ],
-        systems: [
-            "I have a deep focus on distributed systems theory. I study leader election, failure detection topologies, and consensus engines like Paxos.",
-            "Currently analyzing system availability patterns, discrete-event queue simulations, and network performance thresholds under stress.",
-            "I enjoy tracing failure boundaries—how data moves safely across networks when nodes go down or lag unexpectedly."
-        ],
-        creative: [
-            "When the terminal closes, I write poetry and narratives under the alias <span class='output-highlight'>Captain Bliss</span> over on Substack.",
-            "My writing space as Captain Bliss explores complex human mechanics and abstract philosophies through poetry.",
-            "Storytelling balances out my technical architecture. Creative writing offers an abstract blueprint distinct from system design."
-        ],
-        fact: [
-            "Fun Fact: I once built a web-based audio platform using the native Web Audio API just to map out dynamic sound routing parameters!",
-            "Fun Fact: I prefer a full Linux ecosystem. Bash scripting isn't just an option for automating tasks; it's practically my morning coffee.",
-            "Fun Fact: I once wrote a complex literature review for a digital mentorship tracking engine aimed at helping low-resource urban communities."
-        ]
-    };
+(function(){
+  const responses = {
+    whoami: [
+      "I'm <span class='output-highlight'>Cindy Atieno Ogutu</span> — I build resilient backend systems and dynamic client-side applications. I care about systems that don't crack under load.",
+      "That's me. Currently deep in system modeling, distributed architectures, and frontends that speak to real-world context.",
+      "Cindy here. I spend my days orchestrating environments where clean code, reliability metrics, and human creativity meet."
+    ],
+    stack: [
+      "Daily driver: <span class='output-highlight'>Linux (Ubuntu)</span>, shell scripting, TypeScript, JavaScript, and React. On client work I run Next.js (App Router) with CSS Modules — no Tailwind.",
+      "Frontend and systems engineering drive my practical stack. React on the interface layer, structural shell scripting underneath, and a habit of building toward the AWS Well-Architected Framework even on smaller projects.",
+      "Design-system thinking matters to me as much as code — tokens, type scales, and component structure before a single page gets built."
+    ],
+    systems: [
+      "Deep focus on distributed systems theory: leader election, failure detection topologies, and consensus engines like Paxos.",
+      "Currently analyzing system availability patterns, discrete-event queue simulations, and network performance thresholds under stress.",
+      "I enjoy tracing failure boundaries — how data moves safely across networks when nodes go down or lag unexpectedly."
+    ],
+    creative: [
+      "When the terminal closes, I write poetry and narratives under the alias <span class='output-highlight'>Captain Bliss</span> on Substack.",
+      "My writing space as Captain Bliss explores human mechanics and abstract philosophy through poetry — the opposite muscle from system design.",
+      "Storytelling balances out the architecture work. It's an abstract blueprint, not a literal one."
+    ],
+    fact: [
+      "Fun fact: I once built a web-based audio platform on the native Web Audio API just to map dynamic sound routing.",
+      "Fun fact: I prefer a full Linux ecosystem — bash scripting isn't optional for automating tasks, it's basically my morning coffee.",
+      "Fun fact: I wrote a literature review for a digital mentorship tracking engine aimed at low-resource urban communities."
+    ]
+  };
+  const counters = { whoami:0, stack:0, systems:0, creative:0, fact:0, blisstime:0 };
 
-    // Tracks index offsets for alternating responses
-    const counters = { whoami: 0, stack: 0, systems: 0, creative: 0, fact: 0 };
+  const inputField = document.getElementById('cli-input');
+  const logsContainer = document.getElementById('logs');
+  const historyWindow = document.getElementById('terminal-history');
+  const bootContainer = document.getElementById('boot-sequence');
+  const chipRow = document.getElementById('chip-row');
 
-    const inputField = document.getElementById('cli-input');
-    const logsContainer = document.getElementById('logs');
-    const historyWindow = document.getElementById('terminal-history');
+  let cmdHistory = [];
+  let historyPos = -1;
 
-    inputField.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            const rawInput = inputField.value;
-            const cmd = rawInput.trim().toLowerCase();
-            
-            if (cmd.length === 0) return;
+  function scrollToBottom(){
+    historyWindow.scrollTop = historyWindow.scrollHeight;
+  }
 
-            createLogEntry(rawInput, true);
-
-            if (responses[cmd] !== undefined) {
-                // Fetch alternating response from the specific category array
-                const index = counters[cmd] % responses[cmd].length;
-                createLogEntry(responses[cmd][index]);
-                counters[cmd]++;
-            } else {
-                switch(cmd) {
-                    case 'help':
-                        showHelp();
-                        break;
-                    case 'clear':
-                        logsContainer.innerHTML = '';
-                        break;
-                    case 'coffee':
-                        triggerCoffee();
-                        break;
-                    case 'blisstime':
-                        triggerBlisstime();
-                        break;
-                    default:
-                        createLogEntry(`Unknown command: '${rawInput}'. Try typing <span class="output-highlight">help</span> or <span class="output-highlight">fact</span>.`);
-                }
-            }
-
-            inputField.value = '';
-            historyWindow.scrollTop = historyWindow.scrollHeight;
-        }
-    });
-
-    function createLogEntry(text, isCommand = false) {
-        const div = document.createElement('div');
-        if (isCommand) {
-            div.className = 'prompt-line';
-            div.innerHTML = `<span class="user-host">guest@sf-terminal:~$</span><span class="command">${text}</span>`;
-        } else {
-            div.className = 'output-block';
-            div.innerHTML = text.startsWith('<') ? text : `<p>${text}</p>`;
-        }
-        logsContainer.appendChild(div);
+  function createLogEntry(text, isCommand=false){
+    const div = document.createElement('div');
+    if(isCommand){
+      div.className = 'prompt-line';
+      div.innerHTML = `<span class="user-host">guest@sf-terminal:~$</span><span class="command">${escapeHtml(text)}</span>`;
+    } else {
+      div.className = 'output-block';
+      div.innerHTML = text.trim().startsWith('<') ? text : `<p>${text}</p>`;
     }
+    logsContainer.appendChild(div);
+    return div;
+  }
 
-    function showHelp() {
-        const helpText = `
-            <p>Run these commands for dynamic facts and details:</p>
-            <div class="help-grid">
-                <span class="help-cmd">whoami</span><span class="info-val">Bio profiles (changes each run)</span>
-                <span class="help-cmd">stack</span><span class="info-val">Tech infrastructure and tooling specs</span>
-                <span class="help-cmd">systems</span><span class="info-val">Distributed environments deep dive</span>
-                <span class="help-cmd">creative</span><span class="info-val">Explore my Captain Bliss writing identity</span>
-                <span class="help-cmd">fact</span><span class="info-val">Uncover a random piece of trivia about me</span>
-                <span class="help-cmd">coffee</span><span class="info-val">Initiate fuel synthesis mode</span>
-                <span class="help-cmd">blisstime</span><span class="info-val">Launch the creative narrative screen stream</span>
-                <span class="help-cmd">clear</span><span class="info-val">Wipe screen terminal history buffer</span>
-            </div>
-        `;
-        createLogEntry(helpText);
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.innerText = str;
+    return d.innerHTML;
+  }
+
+  function runCommand(rawInput){
+    const cmd = rawInput.trim().toLowerCase();
+    if(cmd.length === 0) return;
+
+    cmdHistory.push(rawInput);
+    historyPos = cmdHistory.length;
+
+    createLogEntry(rawInput, true);
+
+    if(responses[cmd] !== undefined){
+      const idx = counters[cmd] % responses[cmd].length;
+      createLogEntry(responses[cmd][idx]);
+      counters[cmd]++;
+    } else {
+      switch(cmd){
+        case 'help': showHelp(); break;
+        case 'clear': logsContainer.innerHTML=''; break;
+        case 'projects': showProjects(); break;
+        case 'marcktech': showMarcktech(); break;
+        case 'contact': showContact(); break;
+        case 'resume': showResume(); break;
+        case 'coffee': triggerCoffee(); break;
+        case 'blisstime': triggerBlisstime(); break;
+        case 'sudo make me a sandwich':
+        case 'sudo make-me-a-sandwich':
+          createLogEntry("Permission denied. Nice try, though.");
+          break;
+        default:
+          createLogEntry(`Unknown command: '${escapeHtml(rawInput)}'. Try <span class="output-highlight">help</span> or <span class="output-highlight">projects</span>.`);
+      }
     }
+    scrollToBottom();
+  }
 
-    function triggerCoffee() {
-        const coffeeArt = `
-          <span class="steam-line">~</span>  <span class="steam-line steam-2">~</span>  <span class="steam-line steam-3">~</span>
-         |___________| )
-          \\         / /
-           \\_______/ /
-            _______
-           |_______|
-           <p style="margin-top:10px; color:#c084fc;">[SUCCESS] Coffee framework active. Caffeine injected into terminal loop.</p>
-        `;
-        createLogEntry(coffeeArt);
+  inputField.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      const val = inputField.value;
+      inputField.value = '';
+      runCommand(val);
+    } else if(e.key === 'ArrowUp'){
+      if(cmdHistory.length === 0) return;
+      e.preventDefault();
+      historyPos = Math.max(0, historyPos - 1);
+      inputField.value = cmdHistory[historyPos] || '';
+    } else if(e.key === 'ArrowDown'){
+      if(cmdHistory.length === 0) return;
+      e.preventDefault();
+      historyPos = Math.min(cmdHistory.length, historyPos + 1);
+      inputField.value = cmdHistory[historyPos] || '';
     }
+  });
 
-    function triggerBlisstime() {
-        const matrixArt = `
-        <div class="matrix-rain">
-        B L I S S T I M E
-        ⚓ ✦ ⚙ ⚡ 🌊 ✦ ⚓
-        Poetry stream synchronized...
-        Words compiling into the system buffer.
+  chipRow.addEventListener('click', function(e){
+    const btn = e.target.closest('.chip');
+    if(!btn) return;
+    runCommand(btn.dataset.cmd);
+    inputField.focus();
+  });
+
+  document.querySelector('.terminal-window').addEventListener('click', function(e){
+    if(!e.target.closest('.chip')) inputField.focus();
+  });
+
+  function showHelp(){
+    const helpText = `
+      <p>Run these commands (or tap a chip below the prompt):</p>
+      <div class="help-grid">
+        <span class="help-cmd">whoami</span><span>Bio profile (rotates each run)</span>
+        <span class="help-cmd">stack</span><span>Tech and tooling</span>
+        <span class="help-cmd">systems</span><span>Distributed systems interests</span>
+        <span class="help-cmd">projects</span><span>Featured work, including current build</span>
+        <span class="help-cmd">marcktech</span><span>Deep dive: Marcktech Group website</span>
+        <span class="help-cmd">creative</span><span>Captain Bliss — the writing side</span>
+        <span class="help-cmd">contact</span><span>How to reach me</span>
+        <span class="help-cmd">resume</span><span>Résumé link</span>
+        <span class="help-cmd">fact</span><span>Random trivia</span>
+        <span class="help-cmd">coffee</span><span>Fuel synthesis mode</span>
+        <span class="help-cmd">blisstime</span><span>Poetry stream easter egg</span>
+        <span class="help-cmd">clear</span><span>Wipe the screen</span>
+      </div>
+    `;
+    createLogEntry(helpText);
+  }
+
+  function showProjects(){
+    const html = `
+      <p>Selected work:</p>
+      <div class="proj-card">
+        <div class="proj-title">Marcktech Group — full website revamp</div>
+        <div class="proj-meta">In progress · Next.js (App Router) + TypeScript</div>
+        <p>Rebuilding the site for a Nairobi-based tech consulting and digital education company, including <span class="output-highlight">MT Academy</span>, its school extension. Shipped: navbar, homepage sections, contact page. Type <span class="output-highlight">marcktech</span> for the full breakdown.</p>
+        <div class="proj-tags">
+          <span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">CSS Modules</span><span class="tag">Design systems</span>
         </div>
-        `;
-        createLogEntry(matrixArt);
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Web Audio routing platform</div>
+        <div class="proj-meta">Personal project</div>
+        <p>A browser-based tool built on the native Web Audio API to map and manipulate dynamic sound routing without external libraries.</p>
+        <div class="proj-tags"><span class="tag">JavaScript</span><span class="tag">Web Audio API</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Digital mentorship tracking engine — literature review</div>
+        <div class="proj-meta">Research / systems design</div>
+        <p>Groundwork for a tracking system aimed at supporting mentorship programs in low-resource urban communities.</p>
+        <div class="proj-tags"><span class="tag">Systems design</span><span class="tag">Social impact</span></div>
+      </div>
+    `;
+    createLogEntry(html);
+  }
+
+  function showMarcktech(){
+    const html = `
+      <p><span class="output-highlight">Marcktech Group</span> — technology consulting and digital education company, Nairobi, Kenya.</p>
+      <p>Full website revamp, built solo end-to-end: Next.js (App Router), TypeScript, CSS Modules — no Tailwind. Includes MT Academy, the school extension of the brand.</p>
+      <p><strong style="color:#fff">Design system:</strong> Syne for display type, Outfit for body. Palette — Royal Blue #3B5BDB, Gold #FCC419, Deep Navy #0B1F3A, Orange CTA #F47920.</p>
+      <p><strong style="color:#fff">Shipped so far:</strong> scroll-aware navbar (transparent-to-solid on scroll), homepage Hero, alternating-row Services section, TrustBar with mixed stats and logo placeholders, a glassmorphism AcademyTeaser, Testimonials, and the Contact page.</p>
+      <p><strong style="color:#fff">In progress:</strong> the About page — currently being redesigned from scratch.</p>
+      <p><strong style="color:#fff">Workflow:</strong> feature branches merged into <code>develop</code> before <code>main</code>, with a commit after every completed component.</p>
+    `;
+    createLogEntry(html);
+  }
+
+  function showContact(){
+    const html = `
+      <p>Reach out:</p>
+      <p>Email — <a href="mailto:hello@cindyatieno.dev">hello@cindyatieno.dev</a></p>
+      <p>GitHub — <a href="https://github.com/" target="_blank" rel="noopener">github.com/cindyatieno</a></p>
+      <p>Writing (as Captain Bliss) — <a href="https://substack.com/" target="_blank" rel="noopener">substack.com/@captainbliss</a></p>
+      <p style="color:var(--text-dim); font-size:0.82rem; margin-top:6px;">(Swap these placeholder links for your real handles before publishing.)</p>
+    `;
+    createLogEntry(html);
+  }
+
+  function showResume(){
+    createLogEntry(`<p>Résumé — <a href="#" target="_blank" rel="noopener">download PDF</a> (link this to your actual file before publishing).</p>`);
+  }
+
+  function triggerCoffee(){
+    const uid = 'brew-' + Date.now();
+    const html = `
+      <div class="coffee-scene" id="${uid}">
+        <div class="pour-rig">
+          <div class="pot-spout"></div>
+          <div class="pour-stream" id="${uid}-stream"></div>
+        </div>
+        <div class="cup-wrap">
+          <div class="steam-cluster" id="${uid}-steam" style="opacity:0;">
+            <span class="steam-line">~</span><span class="steam-line steam-2">~</span><span class="steam-line steam-3">~</span>
+          </div>
+          <div class="cup">
+            <div class="cup-fill" id="${uid}-fill"></div>
+          </div>
+          <div class="cup-handle"></div>
+          <div class="cup-saucer"></div>
+        </div>
+        <div class="brew-status" id="${uid}-status">Waking up the espresso machine…</div>
+        <div class="brew-bar-track"><div class="brew-bar-fill" id="${uid}-bar"></div></div>
+      </div>
+    `;
+    const entry = createLogEntry(html);
+    scrollToBottom();
+
+    const fillEl = entry.querySelector(`#${uid}-fill`);
+    const barEl = entry.querySelector(`#${uid}-bar`);
+    const statusEl = entry.querySelector(`#${uid}-status`);
+    const steamEl = entry.querySelector(`#${uid}-steam`);
+    const streamEl = entry.querySelector(`#${uid}-stream`);
+
+    const stages = [
+      { pct: 15, msg: "Grinding beans at terminal velocity…" },
+      { pct: 38, msg: "Extracting espresso shot…" },
+      { pct: 62, msg: "Steaming milk (foam.exe running)…" },
+      { pct: 85, msg: "Balancing caffeine-to-code ratio…" },
+      { pct: 100, msg: "Cup full. Systems nominal." }
+    ];
+
+    let i = 0;
+    function nextStage(){
+      if(i >= stages.length){
+        streamEl.style.display = 'none';
+        statusEl.innerHTML = `<span class="brew-done">[SUCCESS] Coffee framework active — caffeine injected into terminal loop. ☕</span>`;
+        scrollToBottom();
+        return;
+      }
+      const s = stages[i];
+      fillEl.style.height = s.pct + '%';
+      barEl.style.width = s.pct + '%';
+      statusEl.textContent = s.msg;
+      if(s.pct >= 20) steamEl.style.opacity = '1';
+      scrollToBottom();
+      i++;
+      setTimeout(nextStage, 520);
     }
+    setTimeout(nextStage, 200);
+  }
+
+  const blissPoems = [
+    {
+      lines: [
+        "the compass doesn't point to north —",
+        "it points to whatever I haven't",
+        "forgiven yet.",
+        "still, I sail toward it."
+      ],
+      byline: "— Captain Bliss, from the logbook"
+    },
+    {
+      lines: [
+        "I keep my failures in the hold,",
+        "below the waterline, where they",
+        "ballast me instead of sinking me.",
+        "a ship needs weight to stay upright."
+      ],
+      byline: "— Captain Bliss, marginalia"
+    },
+    {
+      lines: [
+        "some nights the code compiles",
+        "and some nights I write instead —",
+        "both are ways of asking",
+        "the dark to answer back."
+      ],
+      byline: "— Captain Bliss, unfinished"
+    }
+  ];
+
+  function triggerBlisstime(){
+    const uid = 'bliss-' + Date.now();
+    const starHtml = Array.from({length: 22}, () => {
+      const top = Math.random()*70;
+      const left = Math.random()*100;
+      const delay = (Math.random()*2.4).toFixed(2);
+      return `<span class="bliss-star" style="top:${top}%;left:${left}%;animation-delay:${delay}s;"></span>`;
+    }).join('');
+
+    const html = `
+      <div class="bliss-scene" id="${uid}">
+        ${starHtml}
+        <div class="bliss-moon"></div>
+        <div class="bliss-glyphs">
+          <span style="animation-delay:0s;">⚓</span>
+          <span style="animation-delay:0.7s;">✦</span>
+          <span style="animation-delay:1.4s;">🌊</span>
+          <span style="animation-delay:2.1s;">⚙</span>
+          <span style="animation-delay:2.8s;">✦</span>
+        </div>
+        <div class="bliss-ship">⛵</div>
+        <div class="bliss-waves"></div>
+        <div class="bliss-waves wave-2"></div>
+      </div>
+      <div class="poem-block" id="${uid}-poem"><span class="poem-cursor"></span></div>
+    `;
+    const entry = createLogEntry(html);
+    scrollToBottom();
+
+    const poem = blissPoems[counters.blisstime % blissPoems.length];
+    counters.blisstime++;
+    const poemEl = entry.querySelector(`#${uid}-poem`);
+    const fullText = poem.lines.join('\n');
+    let charIndex = 0;
+
+    function typeNext(){
+      if(charIndex <= fullText.length){
+        const typed = fullText.slice(0, charIndex).replace(/\n/g, '<br>');
+        poemEl.innerHTML = typed + '<span class="poem-cursor"></span>';
+        charIndex++;
+        scrollToBottom();
+        setTimeout(typeNext, 34);
+      } else {
+        poemEl.innerHTML += `<div class="poem-byline">${poem.byline}</div>`;
+        scrollToBottom();
+      }
+    }
+    setTimeout(typeNext, 300);
+  }
+
+  // ---- boot sequence ----
+  const bootLines = [
+    "booting sf-terminal v2.1...",
+    "loading profile: cindy_atieno_ogutu [<span class='ok'>OK</span>]",
+    "mounting /captain_bliss [<span class='ok'>OK</span>]",
+    "establishing connection to marcktech-dev [<span class='ok'>OK</span>]",
+  ];
+
+  function runBoot(i){
+    if(i >= bootLines.length){
+      finishBoot();
+      return;
+    }
+    const div = document.createElement('div');
+    div.className = 'boot-line';
+    div.innerHTML = bootLines[i];
+    bootContainer.appendChild(div);
+    scrollToBottom();
+    setTimeout(() => runBoot(i+1), 220);
+  }
+
+  function finishBoot(){
+    setTimeout(() => {
+      createLogEntry(`
+        <div class="intro">
+          <p>Welcome back, explorer.</p>
+          <p>Type <span class="hl">help</span> to explore my stack, background, and current work — or tap a command below.</p>
+        </div>
+      `);
+      chipRow.style.display = 'flex';
+      // auto-run whoami + stack so content is visible without typing
+      runCommand('whoami');
+      runCommand('stack');
+      scrollToBottom();
+    }, 200);
+  }
+
+  runBoot(0);
+})();
 </script>
 
 </body>
