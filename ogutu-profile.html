@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>cindy_atieno_ogutu ~ terminal</title>
+<title>cindy_ogutu ~ terminal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -209,10 +209,6 @@
     transition:background 0.15s ease, transform 0.1s ease;
   }
   .chip:hover, .chip:focus-visible{background:rgba(126,245,66,0.16); transform:translateY(-1px);}
-  .chip:focus-visible{
-    outline:2px solid var(--amber);
-    outline-offset:2px;
-  }
 
   .input-container{
     display:flex;align-items:center;gap:8px;
@@ -227,16 +223,6 @@
     caret-color:var(--accent);
   }
   .terminal-input::placeholder{color:#4a3e63;}
-  .terminal-input:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:4px;
-    border-radius:4px;
-  }
-
-  .input-container:focus-within{
-    border-color:rgba(126,245,66,0.28);
-    box-shadow:0 0 0 1px rgba(126,245,66,0.12) inset;
-  }
 
   .cursor-blink{
     display:inline-block;width:8px;height:16px;background:var(--accent);
@@ -324,10 +310,10 @@
 
 <div class="identity">
   <div>
-    <h1>Cindy Atieno Ogutu <span>/</span> <span style="color:var(--violet)">Bliss</span></h1>
-    <div class="role">Backend &amp; frontend engineer — distributed systems, resilient architecture, and <em>Captain Bliss</em> on the side.</div>
+    <h1>Cindy Ogutu <span>/</span> <span style="color:var(--violet)">Bliss</span></h1>
+    <div class="role">Frontend Engineer &amp; DevOps practitioner — engineering resilient web systems from UI to deployment. <em>Captain Bliss</em> on the side.</div>
   </div>
-  <div class="status-pill"><span class="status-dot"></span> currently building: Marcktech Group site</div>
+  <div class="status-pill"><span class="status-dot"></span> open to freelance &amp; full-time · Nairobi, KE</div>
 </div>
 
 <div class="terminal-window">
@@ -337,7 +323,7 @@
       <span class="btn btn-minimize"></span>
       <span class="btn btn-maximize"></span>
     </div>
-    <div class="window-title">cindy@atieno:~</div>
+    <div class="window-title">cindy@ogutu:~</div>
   </div>
 
   <div class="terminal-body" id="terminal-history" tabindex="0" aria-live="polite" aria-label="Terminal output">
@@ -356,6 +342,7 @@
       <button class="chip" data-cmd="whoami">whoami</button>
       <button class="chip" data-cmd="stack">stack</button>
       <button class="chip" data-cmd="projects">projects</button>
+      <button class="chip" data-cmd="experience">experience</button>
       <button class="chip" data-cmd="systems">systems</button>
       <button class="chip" data-cmd="creative">creative</button>
       <button class="chip" data-cmd="contact">contact</button>
@@ -378,19 +365,19 @@
 (function(){
   const responses = {
     whoami: [
-      "I'm <span class='output-highlight'>Cindy Atieno Ogutu</span> — I build resilient backend systems and dynamic client-side applications. I care about systems that don't crack under load.",
-      "That's me. Currently deep in system modeling, distributed architectures, and frontends that speak to real-world context.",
-      "Cindy here. I spend my days orchestrating environments where clean code, reliability metrics, and human creativity meet."
+      "I'm <span class='output-highlight'>Cindy Ogutu</span> — a creative engineer who believes software should be enjoyed, not just tolerated. I take ideas from concept to polished, production-ready solutions.",
+      "Frontend Engineer with a DevOps streak. I bridge modern UIs and cloud infrastructure — React frontends, Docker containers, AWS deployments, and CI/CD pipelines that actually stay green.",
+      "Where I'm going: owning the full journey — from first spark of an idea, to polished UI, to reliable deployment. Beautiful to use. Boring to operate."
     ],
     stack: [
-      "Daily driver: <span class='output-highlight'>Linux (Ubuntu)</span>, shell scripting, TypeScript, JavaScript, and React. On client work I run Next.js (App Router) with CSS Modules — no Tailwind.",
-      "Frontend and systems engineering drive my practical stack. React on the interface layer, structural shell scripting underneath, and a habit of building toward the AWS Well-Architected Framework even on smaller projects.",
-      "Design-system thinking matters to me as much as code — tokens, type scales, and component structure before a single page gets built."
+      "Core stack: <span class='output-highlight'>React, TypeScript, Node.js</span> on the app layer, <span class='output-highlight'>Docker, AWS, GitHub Actions</span> underneath. MongoDB for data, Tailwind for most UI work.",
+      "On client engagements I flex the toolkit to the project — e.g. the Marcktech Group rebuild runs Next.js App Router with CSS Modules instead of Tailwind, by design.",
+      "DevOps isn't a side interest — I'm currently automating provisioning scripts and building internal health dashboards at Credit Bank PLC, so infra and frontend both get equal attention."
     ],
     systems: [
-      "Deep focus on distributed systems theory: leader election, failure detection topologies, and consensus engines like Paxos.",
-      "Currently analyzing system availability patterns, discrete-event queue simulations, and network performance thresholds under stress.",
-      "I enjoy tracing failure boundaries — how data moves safely across networks when nodes go down or lag unexpectedly."
+      "DevOps in practice: automating server provisioning to cut new environment setup time by roughly 30%, and documenting infra workflows so knowledge transfer doesn't bottleneck on one person.",
+      "I like closing the loop between infrastructure and the people who have to operate it — dashboards that surface system health metrics in React, not buried in logs.",
+      "Infra-as-Code Starter (one of my projects) came out of watching small teams manually provision AWS resources and drift out of sync between staging and production."
     ],
     creative: [
       "When the terminal closes, I write poetry and narratives under the alias <span class='output-highlight'>Captain Bliss</span> on Substack.",
@@ -400,7 +387,7 @@
     fact: [
       "Fun fact: I once built a web-based audio platform on the native Web Audio API just to map dynamic sound routing.",
       "Fun fact: I prefer a full Linux ecosystem — bash scripting isn't optional for automating tasks, it's basically my morning coffee.",
-      "Fun fact: I wrote a literature review for a digital mentorship tracking engine aimed at low-resource urban communities."
+      "Fun fact: I'm maintaining First Class Honors at Strathmore while working an infrastructure internship and freelancing on the side. Ask me how much sleep that leaves."
     ]
   };
   const counters = { whoami:0, stack:0, systems:0, creative:0, fact:0, blisstime:0 };
@@ -413,7 +400,6 @@
 
   let cmdHistory = [];
   let historyPos = -1;
-  let historyDraft = '';
 
   function scrollToBottom(){
     historyWindow.scrollTop = historyWindow.scrollHeight;
@@ -444,7 +430,6 @@
 
     cmdHistory.push(rawInput);
     historyPos = cmdHistory.length;
-    historyDraft = '';
 
     createLogEntry(rawInput, true);
 
@@ -457,6 +442,8 @@
         case 'help': showHelp(); break;
         case 'clear': logsContainer.innerHTML=''; break;
         case 'projects': showProjects(); break;
+        case 'experience': showExperience(); break;
+        case 'education': showEducation(); break;
         case 'marcktech': showMarcktech(); break;
         case 'contact': showContact(); break;
         case 'resume': showResume(); break;
@@ -481,16 +468,13 @@
     } else if(e.key === 'ArrowUp'){
       if(cmdHistory.length === 0) return;
       e.preventDefault();
-      if(historyPos === cmdHistory.length){
-        historyDraft = inputField.value;
-      }
       historyPos = Math.max(0, historyPos - 1);
       inputField.value = cmdHistory[historyPos] || '';
     } else if(e.key === 'ArrowDown'){
       if(cmdHistory.length === 0) return;
       e.preventDefault();
       historyPos = Math.min(cmdHistory.length, historyPos + 1);
-      inputField.value = historyPos === cmdHistory.length ? historyDraft : (cmdHistory[historyPos] || '');
+      inputField.value = cmdHistory[historyPos] || '';
     }
   });
 
@@ -513,6 +497,8 @@
         <span class="help-cmd">stack</span><span>Tech and tooling</span>
         <span class="help-cmd">systems</span><span>Distributed systems interests</span>
         <span class="help-cmd">projects</span><span>Featured work, including current build</span>
+        <span class="help-cmd">experience</span><span>Work history — internships and roles</span>
+        <span class="help-cmd">education</span><span>Degree, coursework, and certifications</span>
         <span class="help-cmd">marcktech</span><span>Deep dive: Marcktech Group website</span>
         <span class="help-cmd">creative</span><span>Captain Bliss — the writing side</span>
         <span class="help-cmd">contact</span><span>How to reach me</span>
@@ -528,26 +514,91 @@
 
   function showProjects(){
     const html = `
-      <p>Selected work:</p>
+      <p>Real problems, real solutions. Selected work:</p>
+      <div class="proj-card">
+        <div class="proj-title">EduSister — Mental Wellness Platform</div>
+        <div class="proj-meta">Full-Stack Lead</div>
+        <p><strong style="color:#fff">Problem:</strong> Female students in Kenya face 40% higher stress, yet support systems lack cultural sensitivity.</p>
+        <p><strong style="color:#fff">Solution:</strong> Personalized platform with mood tracking, peer matching, and NLP-powered emotional analysis designed for the Kenyan context.</p>
+        <p><strong style="color:#fff">Impact:</strong> 200+ students across 3 universities · 85% sentiment accuracy (28% improvement over baseline) · real-time matching in under 2 seconds.</p>
+        <div class="proj-tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">NLP API</span><span class="tag">Chart.js</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">ShopCart API</div>
+        <div class="proj-meta">Backend</div>
+        <p><strong style="color:#fff">Problem:</strong> A growing online store was hitting rate limits and timeouts during peak traffic due to a monolithic, synchronous checkout flow.</p>
+        <p><strong style="color:#fff">Solution:</strong> Re-architected checkout with async job queues and Redis caching, decoupling inventory checks from payment processing.</p>
+        <p><strong style="color:#fff">Impact:</strong> 3× throughput · 99.9% uptime SLA.</p>
+        <div class="proj-tags"><span class="tag">Node.js</span><span class="tag">Redis</span><span class="tag">MongoDB</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Infra-as-Code Starter</div>
+        <div class="proj-meta">DevOps</div>
+        <p><strong style="color:#fff">Problem:</strong> Small dev teams were manually provisioning AWS resources, causing environment drift between staging and production.</p>
+        <p><strong style="color:#fff">Solution:</strong> Terraform module library covering VPC, ECS, RDS, and S3, with GitHub Actions workflows baked in.</p>
+        <p><strong style="color:#fff">Impact:</strong> 80% reduction in provisioning time · used by 5+ teams.</p>
+        <div class="proj-tags"><span class="tag">Terraform</span><span class="tag">AWS</span><span class="tag">GitHub Actions</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Pulse UI Kit</div>
+        <div class="proj-meta">Frontend</div>
+        <p><strong style="color:#fff">Problem:</strong> A design-engineering team was duplicating UI components across four products with no shared source of truth.</p>
+        <p><strong style="color:#fff">Solution:</strong> Token-based component library with Storybook docs, automated visual regression tests, and semantic-versioned releases.</p>
+        <p><strong style="color:#fff">Impact:</strong> 40+ components shipped · 30% reduction in UI dev time.</p>
+        <div class="proj-tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Tailwind</span></div>
+      </div>
       <div class="proj-card">
         <div class="proj-title">Marcktech Group — full website revamp</div>
-        <div class="proj-meta">In progress · Next.js (App Router) + TypeScript</div>
-        <p>Rebuilding the site for a Nairobi-based tech consulting and digital education company, including <span class="output-highlight">MT Academy</span>, its school extension. Shipped: navbar, homepage sections, contact page. Type <span class="output-highlight">marcktech</span> for the full breakdown.</p>
-        <div class="proj-tags">
-          <span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">CSS Modules</span><span class="tag">Design systems</span>
-        </div>
+        <div class="proj-meta">Freelance · in progress · Next.js (App Router) + TypeScript</div>
+        <p>A separate, current engagement from my earlier internship there — rebuilding the full public site, including <span class="output-highlight">MT Academy</span>, its school extension. Type <span class="output-highlight">marcktech</span> for the breakdown.</p>
+        <div class="proj-tags"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">CSS Modules</span></div>
+      </div>
+    `;
+    createLogEntry(html);
+  }
+
+  function showExperience(){
+    const html = `
+      <p>Building production systems in real-world teams:</p>
+      <div class="proj-card">
+        <div class="proj-title">DevOps Infrastructure &amp; Frontend Engineer Intern — Credit Bank PLC</div>
+        <div class="proj-meta">Jan 2026 — Present · Nairobi, KE · On-site</div>
+        <p>Automating server provisioning scripts to cut new environment setup time by ~30%. Building internal React dashboards for system health monitoring. Documenting infra workflows and validating deployment scripts with senior engineers.</p>
+        <div class="proj-tags"><span class="tag">DevOps</span><span class="tag">Automation</span><span class="tag">React</span><span class="tag">Scripting</span></div>
       </div>
       <div class="proj-card">
-        <div class="proj-title">Web Audio routing platform</div>
-        <div class="proj-meta">Personal project</div>
-        <p>A browser-based tool built on the native Web Audio API to map and manipulate dynamic sound routing without external libraries.</p>
-        <div class="proj-tags"><span class="tag">JavaScript</span><span class="tag">Web Audio API</span></div>
+        <div class="proj-title">Frontend Developer Intern — Marcktech Group</div>
+        <div class="proj-meta">Jan 2025 — May 2025 · Remote</div>
+        <p>Built responsive UI components from Figma designs for an internal company dashboard used by 50+ employees. Implemented data filters and real-time form validation, integrated REST APIs with the backend team, and shipped features on schedule through regular sprint cycles.</p>
+        <div class="proj-tags"><span class="tag">React</span><span class="tag">Figma</span><span class="tag">REST APIs</span><span class="tag">JavaScript</span></div>
       </div>
       <div class="proj-card">
-        <div class="proj-title">Digital mentorship tracking engine — literature review</div>
-        <div class="proj-meta">Research / systems design</div>
-        <p>Groundwork for a tracking system aimed at supporting mentorship programs in low-resource urban communities.</p>
-        <div class="proj-tags"><span class="tag">Systems design</span><span class="tag">Social impact</span></div>
+        <div class="proj-title">Computer Lab Assistant — Strathmore University</div>
+        <div class="proj-meta">Jun 2025 — Aug 2025 · Nairobi, KE · On-site</div>
+        <p>Supported 200+ students and faculty, resolving 95% of issues on first contact. Maintained 50+ workstations across two labs at 100% uptime during peak hours, imaged 30+ machines, and wrote quick-reference guides that cut repeat tickets by ~20%.</p>
+        <div class="proj-tags"><span class="tag">Technical Support</span><span class="tag">Hardware</span><span class="tag">Documentation</span></div>
+      </div>
+    `;
+    createLogEntry(html);
+  }
+
+  function showEducation(){
+    const html = `
+      <p>Academic foundation + professional certifications:</p>
+      <div class="proj-card">
+        <div class="proj-title">B.Sc. Informatics — Computer Science</div>
+        <div class="proj-meta">Strathmore University · 2023 — 2027 (Expected) · Nairobi, Kenya</div>
+        <p>First Class Honors, current GPA: A. Coursework in Data Structures, Algorithms, Database Systems, and Web Development. Served as Computer Lab Assistant supporting 200+ students throughout.</p>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Front-End Web Development Certificate</div>
+        <div class="proj-meta">ALX Africa · Oct 2024</div>
+        <div class="proj-tags"><span class="tag">JavaScript</span><span class="tag">React.js</span><span class="tag">Tailwind CSS</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Professional Foundations Certificate</div>
+        <div class="proj-meta">ALX Africa · Aug 2024</div>
+        <div class="proj-tags"><span class="tag">Teamwork</span><span class="tag">Project Management</span><span class="tag">Leadership</span></div>
       </div>
     `;
     createLogEntry(html);
@@ -556,6 +607,7 @@
   function showMarcktech(){
     const html = `
       <p><span class="output-highlight">Marcktech Group</span> — technology consulting and digital education company, Nairobi, Kenya.</p>
+      <p>Note: this is a separate, current freelance engagement — distinct from my earlier Frontend Developer Intern role there (Jan–May 2025, internal dashboard work).</p>
       <p>Full website revamp, built solo end-to-end: Next.js (App Router), TypeScript, CSS Modules — no Tailwind. Includes MT Academy, the school extension of the brand.</p>
       <p><strong style="color:#fff">Design system:</strong> Syne for display type, Outfit for body. Palette — Royal Blue #3B5BDB, Gold #FCC419, Deep Navy #0B1F3A, Orange CTA #F47920.</p>
       <p><strong style="color:#fff">Shipped so far:</strong> scroll-aware navbar (transparent-to-solid on scroll), homepage Hero, alternating-row Services section, TrustBar with mixed stats and logo placeholders, a glassmorphism AcademyTeaser, Testimonials, and the Contact page.</p>
@@ -567,17 +619,17 @@
 
   function showContact(){
     const html = `
-      <p>Reach out:</p>
-      <p>Email — <a href="mailto:hello@cindyatieno.dev">hello@cindyatieno.dev</a></p>
-      <p>GitHub — <a href="https://github.com/" target="_blank" rel="noopener">github.com/cindyatieno</a></p>
-      <p>Writing (as Captain Bliss) — <a href="https://substack.com/" target="_blank" rel="noopener">substack.com/@captainbliss</a></p>
-      <p style="color:var(--text-dim); font-size:0.82rem; margin-top:6px;">(Swap these placeholder links for your real handles before publishing.)</p>
+      <p>Typically responds within 24 hours. Currently accepting connections:</p>
+      <p>Email — <a href="mailto:cindyogutu0@gmail.com">cindyogutu0@gmail.com</a></p>
+      <p>LinkedIn — <a href="https://linkedin.com/in/cindyogutu" target="_blank" rel="noopener">linkedin.com/in/cindyogutu</a></p>
+      <p>GitHub — <a href="https://github.com/Bliss109" target="_blank" rel="noopener">github.com/Bliss109</a></p>
+      <p style="color:var(--text-dim); font-size:0.82rem; margin-top:6px;">Open to freelance and full-time roles where I can own meaningful pieces of the stack — from UI to deployment.</p>
     `;
     createLogEntry(html);
   }
 
   function showResume(){
-    createLogEntry(`<p>Résumé — <a href="#" target="_blank" rel="noopener">download PDF</a> (link this to your actual file before publishing).</p>`);
+    createLogEntry(`<p>Résumé — <a href="https://linkedin.com/in/cindyogutu" target="_blank" rel="noopener">linkedin.com/in/cindyogutu</a></p>`);
   }
 
   function triggerCoffee(){
