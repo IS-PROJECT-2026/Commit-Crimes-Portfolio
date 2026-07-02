@@ -209,6 +209,10 @@
     transition:background 0.15s ease, transform 0.1s ease;
   }
   .chip:hover, .chip:focus-visible{background:rgba(126,245,66,0.16); transform:translateY(-1px);}
+  .chip:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:2px;
+  }
 
   .input-container{
     display:flex;align-items:center;gap:8px;
@@ -223,6 +227,16 @@
     caret-color:var(--accent);
   }
   .terminal-input::placeholder{color:#4a3e63;}
+  .terminal-input:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:4px;
+    border-radius:4px;
+  }
+
+  .input-container:focus-within{
+    border-color:rgba(126,245,66,0.28);
+    box-shadow:0 0 0 1px rgba(126,245,66,0.12) inset;
+  }
 
   .cursor-blink{
     display:inline-block;width:8px;height:16px;background:var(--accent);
@@ -399,6 +413,7 @@
 
   let cmdHistory = [];
   let historyPos = -1;
+  let historyDraft = '';
 
   function scrollToBottom(){
     historyWindow.scrollTop = historyWindow.scrollHeight;
@@ -429,6 +444,7 @@
 
     cmdHistory.push(rawInput);
     historyPos = cmdHistory.length;
+    historyDraft = '';
 
     createLogEntry(rawInput, true);
 
@@ -465,13 +481,16 @@
     } else if(e.key === 'ArrowUp'){
       if(cmdHistory.length === 0) return;
       e.preventDefault();
+      if(historyPos === cmdHistory.length){
+        historyDraft = inputField.value;
+      }
       historyPos = Math.max(0, historyPos - 1);
       inputField.value = cmdHistory[historyPos] || '';
     } else if(e.key === 'ArrowDown'){
       if(cmdHistory.length === 0) return;
       e.preventDefault();
       historyPos = Math.min(cmdHistory.length, historyPos + 1);
-      inputField.value = cmdHistory[historyPos] || '';
+      inputField.value = historyPos === cmdHistory.length ? historyDraft : (cmdHistory[historyPos] || '');
     }
   });
 
