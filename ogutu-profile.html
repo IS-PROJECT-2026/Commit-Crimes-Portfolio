@@ -327,7 +327,7 @@
     <div class="window-title">cindy@ogutu:~</div>
   </div>
 
-  <div class="terminal-body" id="terminal-history" tabindex="0" aria-live="polite" aria-label="Terminal output">
+  <div class="terminal-body" id="terminal-history" tabindex="0" aria-label="Terminal output">
     <div class="ascii-art">
    ____ _____ _   _ ______     __
   / ___|_   _| | | |  _ \ \   / /
@@ -337,7 +337,7 @@
     </div>
 
     <div id="boot-sequence"></div>
-    <div id="logs"></div>
+    <div id="logs" role="log" aria-live="polite" aria-relevant="additions" aria-atomic="false"></div>
 
     <div class="chip-row" id="chip-row" style="display:none;">
       <button class="chip" data-cmd="whoami">whoami</button>
